@@ -93,19 +93,19 @@ class Dacte(xFPDF):
 
         self.page_lines = 0
         self.inf_carga_list = []
-        for infQ in self.inf_carga:
+        for infQ in self.inf_carga or []:
             self.c_unid = extract_text(infQ, "cUnid")
             self.tp_media = extract_text(infQ, "tpMed")
             self.q_carga = extract_text(infQ, "qCarga")
             self.inf_carga_list.append((self.c_unid, self.tp_media, self.q_carga))
 
         self.inf_doc_list = []
-        for chave in self.inf_doc:
+        for chave in self.inf_doc or []:
             self.chave = extract_text(chave, "chave")
             self.inf_doc_list.append(self.chave)
 
         self.comp_list = []
-        for comp in self.v_prest.findall(f"{URL}Comp"):
+        for comp in self.v_prest.findall(f"{URL}Comp") or []:
             self.xNome = extract_text(comp, "xNome")
             self.vComp = extract_text(comp, "vComp")
             self.comp_list.append((self.xNome, self.vComp))
@@ -124,7 +124,7 @@ class Dacte(xFPDF):
         self.nr_dacte = extract_text(self.ide, "nCT")
         self.serie_cte = extract_text(self.ide, "serie")
         self.key_cte = self.inf_cte.attrib.get("Id")[3:]
-        self.tp_cte = TP_CTE[extract_text(self.ide, "tpCTe")]
+        
         self.tp_serv = TP_SERVICO[extract_text(self.ide, "tpServ")]
         self.prot_uso = self._get_usage_protocol()
         self.mod = extract_text(self.ide, "mod")
