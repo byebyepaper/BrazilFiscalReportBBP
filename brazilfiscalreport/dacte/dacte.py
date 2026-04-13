@@ -124,7 +124,7 @@ class Dacte(xFPDF):
         self.nr_dacte = extract_text(self.ide, "nCT")
         self.serie_cte = extract_text(self.ide, "serie")
         self.key_cte = self.inf_cte.attrib.get("Id")[3:]
-        
+        self.tp_cte = TP_CTE[extract_text(self.ide, "tpCTe")]
         self.tp_serv = TP_SERVICO[extract_text(self.ide, "tpServ")]
         self.prot_uso = self._get_usage_protocol()
         self.mod = extract_text(self.ide, "mod")
