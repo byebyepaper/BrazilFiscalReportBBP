@@ -50,7 +50,15 @@ def number_filter(doc):
 
 
 def format_cpf_cnpj(doc):
-    doc = number_filter(doc)
+    # CNPJ alfanumérico (IN RFB 2.229/2024): as 12 primeiras posições podem
+    # conter letras maiúsculas. Só se trata como alfanumérico o valor que,
+    # limpo, tem exatamente 14 posições com DV numérico; qualquer outra coisa
+    # cai no comportamento antigo (somente dígitos), para que letras
+    # incidentais em texto livre não corrompam a máscara.
+    alnum = re.sub(r"[^0-9A-Z]", "", (doc or "").upper())
+    if len(alnum) == 14 and alnum[12:].isdigit() and not alnum.isdigit():
+        return f"{alnum[:2]}.{alnum[2:5]}.{alnum[5:8]}/{alnum[8:12]}-{alnum[-2:]}"
+    doc = number_filter(doc or "")
     if doc:
         if len(doc) > 11:
             doc = f"{doc:0>14.14}"
