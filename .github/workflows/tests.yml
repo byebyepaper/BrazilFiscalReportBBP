@@ -10,20 +10,20 @@ jobs:
   tests:
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}-latest
+    # Migracao ws360 (Fase 2): alvo 3.12/3.13; 3.14 e o burndown final
+    # (deprecacao de bool(Element) do ElementTree ainda emite warnings).
+    continue-on-error: ${{ matrix.experimental || false }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          - {name: "Python 3.8", python: "3.8-dev", os: "ubuntu"}
-          - {name: "Python 3.9", python: "3.9-dev", os: "ubuntu"}
-          - {name: "Python 3.10", python: "3.10-dev", os: "ubuntu"}
-          - {name: "Python 3.11", python: "3.11-dev", os: "ubuntu"}
-          - {name: "Python 3.12", python: "3.12-dev", os: "ubuntu"}
-          - {name: "Python 3.13", python: "3.13-dev", os: "ubuntu"}
+          - {name: "Python 3.12", python: "3.12", os: "ubuntu"}
+          - {name: "Python 3.13", python: "3.13", os: "ubuntu"}
+          - {name: "Python 3.14", python: "3.14", os: "ubuntu", experimental: true}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
       - name: Set up Python ${{ matrix.python }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python }}
       - name: Install qpdf ⚙️
